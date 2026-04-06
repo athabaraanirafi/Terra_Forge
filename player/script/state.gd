@@ -1,9 +1,18 @@
 enum PState {
-	Run,
-	Idle,
-	Startup,
-	Jump,
-	Dash,
+	RUN,
+	IDLE,
+	JUMP,
+	DASH,
+	FALL
+}
+
+enum Dir {
+	LEFT,
+	RIGHT,
+}
+
+enum Pressed {
+	
 }
 
 func start() -> int:
