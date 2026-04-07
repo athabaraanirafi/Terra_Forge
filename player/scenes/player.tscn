@@ -77,3 +77,4 @@ position = Vector2( 0, 5 )
 shape = SubResource( 12 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
