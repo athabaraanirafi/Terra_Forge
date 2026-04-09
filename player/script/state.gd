@@ -5,10 +5,11 @@ enum PState {
 	DASH,
 	FALL
 }
+const PLAYER_SPEED = 600
 
 enum Dir {
-	LEFT,
-	RIGHT,
+	LEFT = -PLAYER_SPEED,
+	RIGHT = PLAYER_SPEED,
 }
 
 enum Pressed {

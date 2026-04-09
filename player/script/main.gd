@@ -6,55 +6,93 @@ var PLAYER_STATE = state.PState.IDLE
 var PLAYER_DIR = state.Dir.RIGHT
 
 var PLAYER_VELOCITY = Vector2()
-const PLAYER_SPEED = 50
-const PLAYER_JUMP_MOD = -200
+const PLAYER_SPEED = 600
+const PLAYER_SPEED_CAP = 600
+const PLAYER_JUMP_MOD = 600
+const PLAYER_FRICTION = 20
+var JUMP_BUFF = 2
 
-var JUMP_BUFF = 3
-var INPUT_POLL = []
+var LAST_TAP = {
+	"move_left": 0.0,
+	"move_right": 0.0
+}
 
-# Called when the node enters the scene tree for the first time.
+var DASH_TIMER = 0.0
+const DASH_DURATION = 0.25
+
+func check_double_tap(action: String) -> bool:
+	var current_time = OS.get_ticks_msec() / 1000.0
+	
+	if current_time - LAST_TAP[action] <= DTAP_THRESHOLD:
+		LAST_TAP[action] = 0
+		return true
+	
+	LAST_TAP[action] = current_time
+	return false
+
+var DTAP_THRESHOLD = 0.25
+
 func _ready():
 	pass
-	#Input.is_action_pressed("move_left")
-	
-#	pass # Replace with function body.
 
 func _physics_process(delta):
-	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
-	process_input()
-	action()
+	if DASH_TIMER <= 0:
+		PLAYER_STATE = state.PState.IDLE
+		PLAYER_VELOCITY.y += Physics.GRAVITY * delta
+	else:
+		DASH_TIMER -= delta
+	process_input()		
+	action(delta)
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
-	
-	
+		
 func process_input():
+	if Input.is_action_just_pressed("move_left"):
+		PLAYER_DIR = state.Dir.LEFT		
+		if check_double_tap("move_left"):
+			PLAYER_STATE = state.PState.DASH
+			#print("DOUBLE TAP LEFT")
+			return
+	elif Input.is_action_just_pressed("move_right"):
+		PLAYER_DIR = state.Dir.RIGHT
+		if check_double_tap("move_right"):
+			PLAYER_STATE = state.PState.DASH			
+			#print("DOUBLE TAP RIGHT")
+			return
 	if is_on_floor():
 		if Input.is_action_pressed("move_left"):
-			PLAYER_DIR = state.Dir.LEFT
 			PLAYER_STATE = state.PState.RUN
 		elif Input.is_action_pressed("move_right"):
-			PLAYER_DIR = state.Dir.RIGHT
-			PLAYER_STATE = state.PState.RUN		
+			PLAYER_STATE = state.PState.RUN
 		else:
 			PLAYER_STATE = state.PState.IDLE
 		if Input.is_action_pressed("jump"):
 			PLAYER_STATE = state.PState.JUMP
 	else:
 		PLAYER_STATE = state.PState.FALL
-		
-func action():
-	var speed = 0;
-	match PLAYER_DIR:
-		state.Dir.LEFT:
-			speed = -PLAYER_SPEED
-		state.Dir.RIGHT:
-			speed = PLAYER_SPEED
-	match PLAYER_STATE: 
+		if Input.is_action_pressed("move_left"):
+			PLAYER_DIR = state.Dir.LEFT
+		elif Input.is_action_pressed("move_right"):
+			PLAYER_DIR = state.Dir.RIGHT
+
+func action(delta):
+	match PLAYER_STATE:
+		state.PState.DASH:
+			PLAYER_VELOCITY.x = PLAYER_DIR * 2
+			DASH_TIMER = DASH_DURATION
 		state.PState.JUMP:
-			PLAYER_VELOCITY.y = PLAYER_JUMP_MOD * JUMP_BUFF
+			PLAYER_VELOCITY.y = -PLAYER_JUMP_MOD
 		state.PState.RUN:
-			PLAYER_VELOCITY.x += speed
+			PLAYER_VELOCITY.x += PLAYER_DIR * delta
+			PLAYER_VELOCITY.x = clamp(PLAYER_VELOCITY.x, -PLAYER_SPEED_CAP, PLAYER_SPEED_CAP)
 		state.PState.IDLE:
-			PLAYER_VELOCITY.x = 0
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+			if abs(PLAYER_VELOCITY.x) < PLAYER_FRICTION:
+				PLAYER_VELOCITY.x = 0
+			else:
+				PLAYER_VELOCITY.x -= sign(PLAYER_VELOCITY.x) * PLAYER_FRICTION
+
+
+func to_positive(number: int) -> int:
+	if number < 0:
+		return number * -1
+	else:
+		return number
