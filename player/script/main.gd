@@ -11,6 +11,7 @@ const PLAYER_SPEED_CAP = 600
 const PLAYER_JUMP_MOD = 600
 const PLAYER_FRICTION = 20
 var JUMP_BUFF = 2
+var ACTION_POOL: Array = []
 
 var LAST_TAP = {
 	"move_left": 0.0,
@@ -44,52 +45,67 @@ func _physics_process(delta):
 	process_input()		
 	action(delta)
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
-		
+	
+	
+
 func process_input():
 	if Input.is_action_just_pressed("move_left"):
 		PLAYER_DIR = state.Dir.LEFT		
 		if check_double_tap("move_left"):
-			PLAYER_STATE = state.PState.DASH
+			#PLAYER_STATE = state.PState.DASH
 			#print("DOUBLE TAP LEFT")
+			ACTION_POOL.push_back(state.Action.DASH)
 			return
 	elif Input.is_action_just_pressed("move_right"):
 		PLAYER_DIR = state.Dir.RIGHT
 		if check_double_tap("move_right"):
-			PLAYER_STATE = state.PState.DASH			
+			#PLAYER_STATE = state.PState.DASH			
 			#print("DOUBLE TAP RIGHT")
+			ACTION_POOL.push_back(state.Action.DASH)			
 			return
 	if is_on_floor():
 		if Input.is_action_pressed("move_left"):
-			PLAYER_STATE = state.PState.RUN
+			#PLAYER_STATE = state.PState.RUN
+			PLAYER_DIR = state.Dir.LEFT
+			ACTION_POOL.push_back(state.Action.RUN)						
 		elif Input.is_action_pressed("move_right"):
-			PLAYER_STATE = state.PState.RUN
+			#PLAYER_STATE = state.PState.RUN
+			PLAYER_DIR = state.Dir.RIGHT			
+			ACTION_POOL.push_back(state.Action.RUN)									
 		else:
-			PLAYER_STATE = state.PState.IDLE
+			ACTION_POOL.push_back(state.Action.IDLE)						
+			#PLAYER_STATE = state.PState.IDLE
 		if Input.is_action_pressed("jump"):
-			PLAYER_STATE = state.PState.JUMP
+			#PLAYER_STATE = state.PState.JUMP
+			ACTION_POOL.push_back(state.Action.JUMP)									
 	else:
-		PLAYER_STATE = state.PState.FALL
+		#PLAYER_STATE = state.PState.FALL
 		if Input.is_action_pressed("move_left"):
 			PLAYER_DIR = state.Dir.LEFT
 		elif Input.is_action_pressed("move_right"):
 			PLAYER_DIR = state.Dir.RIGHT
 
 func action(delta):
-	match PLAYER_STATE:
-		state.PState.DASH:
-			PLAYER_VELOCITY.x = PLAYER_DIR * 2
-			DASH_TIMER = DASH_DURATION
-		state.PState.JUMP:
-			PLAYER_VELOCITY.y = -PLAYER_JUMP_MOD
-		state.PState.RUN:
-			PLAYER_VELOCITY.x += PLAYER_DIR * delta
-			PLAYER_VELOCITY.x = clamp(PLAYER_VELOCITY.x, -PLAYER_SPEED_CAP, PLAYER_SPEED_CAP)
-		state.PState.IDLE:
-			if abs(PLAYER_VELOCITY.x) < PLAYER_FRICTION:
-				PLAYER_VELOCITY.x = 0
-			else:
-				PLAYER_VELOCITY.x -= sign(PLAYER_VELOCITY.x) * PLAYER_FRICTION
-
+	for action in ACTION_POOL:
+		match action:
+			state.Action.DASH:
+				PLAYER_VELOCITY.x = PLAYER_DIR * 2
+				DASH_TIMER = DASH_DURATION
+				pass
+			state.Action.RUN:
+				PLAYER_VELOCITY.x = PLAYER_DIR
+				PLAYER_VELOCITY.x = clamp(PLAYER_VELOCITY.x, -PLAYER_SPEED_CAP, PLAYER_SPEED_CAP)
+				pass
+			state.Action.JUMP:
+				PLAYER_VELOCITY.y = -PLAYER_JUMP_MOD
+				pass
+			state.Action.IDLE:				
+				if abs(PLAYER_VELOCITY.x) < PLAYER_FRICTION:
+					PLAYER_VELOCITY.x = 0
+				else:
+					PLAYER_VELOCITY.x -= sign(PLAYER_VELOCITY.x) * PLAYER_FRICTION
+				pass
+	ACTION_POOL.clear()
 
 func to_positive(number: int) -> int:
 	if number < 0:
