@@ -5,7 +5,15 @@ enum PState {
 	DASH,
 	FALL
 }
-const PLAYER_SPEED = 600
+
+enum Action {
+	RUN,
+	IDLE,
+	JUMP,
+	DASH,
+}
+
+const PLAYER_SPEED = 330
 
 enum Dir {
 	LEFT = -PLAYER_SPEED,
