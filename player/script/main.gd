@@ -5,10 +5,15 @@ const state = preload("res://player/script/state.gd")
 onready var PLAYER_DIR = state.Dir.RIGHT
 onready var PLAYER_VELOCITY = Vector2()
 onready var PLAYER_ACTION = state.Action.IDLE
-onready var PLAYER_ACTION_FRAME = state.Action_Frame[PLAYER_ACTION]
+onready var PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
+onready var PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 onready var PLAYER = $AnimatedSprite
+var FLOORED = false
+var PREV_FRAME_FLOORED = false
 func _reassign_frame():
-	PLAYER_ACTION_FRAME = state.Action_Frame[PLAYER_ACTION]
+	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
+	PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
+	#print(PLAYER_ACTION_PACK)
 
 func _change_action(action):
 	PLAYER_ACTION = action
@@ -24,16 +29,28 @@ func _change_dir(dir):
 	
 func _ready():
 	_change_dir(PLAYER_DIR)
+
 func _physics_process(delta):
-	print(PLAYER_ACTION_FRAME)
-	PLAYER_VELOCITY.y += Physics.GRAVITY * delta	
-	if PLAYER_ACTION_FRAME != 0:
-		PLAYER_ACTION_FRAME -= 1
+	PREV_FRAME_FLOORED = FLOORED
+	FLOORED = is_on_floor()
+	
+	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
+	
+	if PLAYER_FRAME != 0:
+		PLAYER_FRAME -= 1
 	else:
-		if !is_on_floor():
-			_change_action(state.Action.FALL)
+		if FLOORED:
+			_change_action(PLAYER_ACTION_PACK.Floor)
 		else:
-			_change_action(state.Action.IDLE)
+			_change_action(PLAYER_ACTION_PACK.Float)
+		#_change_action(PLAYER_ACTION_PACK.Next)
+		#if FLOORED:
+		#	if PREV_FRAME_FLOORED:
+		#		_change_action(state.Action.IDLE)						
+		#	else:
+		##lse:
+		#	_change_action(state.Action.FALL)
+			
 		#PLAYER_ACTION = state.Action.IDLE
 	
 	process_input()
@@ -43,7 +60,8 @@ func _physics_process(delta):
 
 
 func process_input():
-	if is_on_floor() && PLAYER_ACTION != state.Action.JUMP | state.Action.FALL | state.Action.SLIDE:
+	#if is_on_floor() && PLAYER_ACTION != state.Action.JUMP | state.Action.FALL | state.Action.SLIDE:
+	if is_on_floor():
 		if Input.is_action_pressed("move_left"):
 			_change_action(state.Action.RUN)			
 			_change_dir(state.Dir.LEFT)
@@ -76,4 +94,5 @@ func _action_process():
 		state.Action.SLIDE:
 			PLAYER.play("SLIDE")
 			PLAYER_VELOCITY.x = PLAYER_DIR * 2
-			
+		state.Action.LANDING:
+			PLAYER.play("LANDING")
