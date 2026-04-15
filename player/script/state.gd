@@ -12,7 +12,14 @@ enum Action {
 	CROUCH,
 }
 
+enum Is {
+	FLOAT,
+	FLOOR,
+	CROUCH
+}
+
 # Jadi value disini korespon terhadap "lamanya" aksi itu nanti, per frame based
+# Fi, kamu bisa tweak sesuka hati pas testing dsb, this is the real reason i do it like this
 const Action_Pack = {
 	Action.RUN: {
 		"Frame": 1,
@@ -20,7 +27,7 @@ const Action_Pack = {
 		"Float": Action.FALL
 	},
 	Action.CROUCH: {
-		"Frame": 1,
+		"Frame": 3,
 		"Floor": Action.IDLE,
 		"Float": Action.FALL
 	},

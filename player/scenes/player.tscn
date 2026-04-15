@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=72 format=2]
 
 [ext_resource path="res://player/script/main.gd" type="Script" id=1]
 [ext_resource path="res://player/spritesheet/run/run loop.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://player/spritesheet/jump/fall only.png" type="Texture" id=6]
 [ext_resource path="res://player/spritesheet/jump/landing only.png" type="Texture" id=7]
 [ext_resource path="res://player/spritesheet/slide/slide_at_home.png" type="Texture" id=8]
+[ext_resource path="res://player/script/hand.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 6 )
@@ -307,3 +308,10 @@ shape = SubResource( 12 )
 position = Vector2( -85.3333, -104.333 )
 anchor_mode = 0
 current = true
+
+[node name="LeftHand" type="Node2D" parent="."]
+position = Vector2( 0, -0.666664 )
+script = ExtResource( 9 )
+
+[node name="RightHand" type="Node2D" parent="."]
+script = ExtResource( 9 )

@@ -8,12 +8,13 @@ onready var PLAYER_ACTION = state.Action.IDLE
 onready var PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
 onready var PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 onready var PLAYER = $AnimatedSprite
+onready var LEFT_HAND = $LeftHand
+onready var RIGHT_HAND = $RightHand
 var FLOORED = false
-var PREV_FRAME_FLOORED = false
+
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
 	PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
-	#print(PLAYER_ACTION_PACK)
 
 func _change_action(action):
 	PLAYER_ACTION = action
@@ -31,11 +32,9 @@ func _ready():
 	_change_dir(PLAYER_DIR)
 
 func _physics_process(delta):
-	PREV_FRAME_FLOORED = FLOORED
 	FLOORED = is_on_floor()
 	
 	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
-	
 	if PLAYER_FRAME != 0:
 		PLAYER_FRAME -= 1
 	else:
@@ -43,16 +42,6 @@ func _physics_process(delta):
 			_change_action(PLAYER_ACTION_PACK.Floor)
 		else:
 			_change_action(PLAYER_ACTION_PACK.Float)
-		#_change_action(PLAYER_ACTION_PACK.Next)
-		#if FLOORED:
-		#	if PREV_FRAME_FLOORED:
-		#		_change_action(state.Action.IDLE)						
-		#	else:
-		##lse:
-		#	_change_action(state.Action.FALL)
-			
-		#PLAYER_ACTION = state.Action.IDLE
-	
 	process_input()
 	_action_process()
 	#PLAYER.play("LANDING")
@@ -60,8 +49,14 @@ func _physics_process(delta):
 
 
 func process_input():
+	if Input.is_action_just_pressed("left_hand"):
+		LEFT_HAND.attack()
+		pass
+	if Input.is_action_just_pressed("right_hand"):
+		RIGHT_HAND.attack()
+		pass
 	#if is_on_floor() && PLAYER_ACTION != state.Action.JUMP | state.Action.FALL | state.Action.SLIDE:
-	if is_on_floor():
+	if FLOORED:
 		if Input.is_action_pressed("move_left"):
 			_change_action(state.Action.RUN)			
 			_change_dir(state.Dir.LEFT)
