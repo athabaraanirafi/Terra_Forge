@@ -1,6 +1,7 @@
 # Ini langsung ubah aja buat play test
 const PLAYER_SPEED = 200
 const JUMP_MOD = -200
+const COYOTE_FRAME = 20
 
 enum Action {
 	RUN,
@@ -52,7 +53,7 @@ const Action_Pack = {
 		Is.CROUCHING: Action.LANDING,
 	},
 	Action.LANDING: {
-		"Frame": 25,
+		"Frame": 20,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.IDLE_CROUCH,

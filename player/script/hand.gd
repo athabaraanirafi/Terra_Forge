@@ -14,5 +14,5 @@ func load_weapon(weapon_id):
 	self.add_child(CURRENT_WEAPON)
 
 func attack():
-	CURRENT_WEAPON.attack()
+	print("attack!")
 	pass

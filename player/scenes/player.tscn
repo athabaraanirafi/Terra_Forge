@@ -303,7 +303,7 @@ script = ExtResource( 1 )
 frames = SubResource( 11 )
 animation = "IDLE"
 
-[node name="PlayerBody" type="CollisionShape2D" parent="."]
+[node name="PhysicBox" type="CollisionShape2D" parent="."]
 position = Vector2( -0.666672, 17.5 )
 shape = SubResource( 12 )
 one_way_collision = true
