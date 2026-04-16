@@ -10,13 +10,14 @@ onready var PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 onready var PLAYER = $AnimatedSprite
 onready var LEFT_HAND = $LeftHand
 onready var RIGHT_HAND = $RightHand
-var FLOORED = false
+onready var PLAYER_IS = state.Is.FLOATING
 
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
 	PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 
 func _change_action(action):
+	print(action)
 	PLAYER_ACTION = action
 	_reassign_frame()
 
@@ -32,16 +33,19 @@ func _ready():
 	_change_dir(PLAYER_DIR)
 
 func _physics_process(delta):
-	FLOORED = is_on_floor()
+	if is_on_floor():
+		if Input.is_action_pressed("crouch"):
+			PLAYER_IS = state.Is.CROUCHING
+		else:
+			PLAYER_IS = state.Is.STANDING
+	else:
+		PLAYER_IS = state.Is.FLOATING
 	
 	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
 	if PLAYER_FRAME != 0:
 		PLAYER_FRAME -= 1
 	else:
-		if FLOORED:
-			_change_action(PLAYER_ACTION_PACK.Floor)
-		else:
-			_change_action(PLAYER_ACTION_PACK.Float)
+		_change_action(PLAYER_ACTION_PACK[PLAYER_IS])
 	process_input()
 	_action_process()
 	#PLAYER.play("LANDING")
@@ -55,23 +59,22 @@ func process_input():
 	if Input.is_action_just_pressed("right_hand"):
 		RIGHT_HAND.attack()
 		pass
-	#if is_on_floor() && PLAYER_ACTION != state.Action.JUMP | state.Action.FALL | state.Action.SLIDE:
-	if FLOORED:
-		if Input.is_action_pressed("move_left"):
-			_change_action(state.Action.RUN)			
-			_change_dir(state.Dir.LEFT)
+	match PLAYER_IS:
+		state.Is.STANDING:
+			if Input.is_action_pressed("move_left"):
+				_change_action(state.Action.RUN)			
+				_change_dir(state.Dir.LEFT)
+			elif Input.is_action_pressed("move_right"):
+				_change_action(state.Action.RUN)			
+				_change_dir(state.Dir.RIGHT)
+			if Input.is_action_pressed("jump"):
+				_change_action(state.Action.JUMP)		
+		state.Is.FLOATING:
 			pass
-		elif Input.is_action_pressed("move_right"):
-			_change_action(state.Action.RUN)			
-			_change_dir(state.Dir.RIGHT)			
-			pass
-		if Input.is_action_just_pressed("jump"):
-			if Input.is_action_pressed("crouch"):
+		state.Is.CROUCHING:
+			if Input.is_action_just_pressed("jump"):
 				_change_action(state.Action.SLIDE)
-			else:
-				_change_action(state.Action.JUMP)
-	else:
-		pass
+			pass
 
 func _action_process():
 	match PLAYER_ACTION:
@@ -79,6 +82,9 @@ func _action_process():
 			PLAYER.play("JUMP")
 			PLAYER_VELOCITY.y = state.JUMP_MOD
 		state.Action.IDLE:
+			PLAYER.play("IDLE")
+			PLAYER_VELOCITY.x = 0
+		state.Action.IDLE_CROUCH:
 			PLAYER.play("IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.FALL:
