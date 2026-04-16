@@ -11,6 +11,7 @@ onready var PLAYER = $AnimatedSprite
 onready var LEFT_HAND = $LeftHand
 onready var RIGHT_HAND = $RightHand
 onready var PLAYER_IS = state.Is.FLOATING
+onready var COYOTE_FRAME = state.COYOTE_FRAME
 
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
@@ -30,12 +31,17 @@ func _change_dir(dir):
 
 func _process_position():
 	if is_on_floor():
+		COYOTE_FRAME = state.COYOTE_FRAME
 		if Input.is_action_pressed("crouch"):
 			PLAYER_IS = state.Is.CROUCHING
 		else:
 			PLAYER_IS = state.Is.STANDING
 	else:
-		PLAYER_IS = state.Is.FLOATING	
+		if COYOTE_FRAME > 0:
+			COYOTE_FRAME -= 1
+			PLAYER_IS = state.Is.STANDING
+		else:
+			PLAYER_IS = state.Is.FLOATING	
 
 func _ready():
 	_change_dir(PLAYER_DIR)
@@ -47,7 +53,7 @@ func _physics_process(delta):
 		PLAYER_FRAME -= 1
 	else:
 		_change_action(PLAYER_ACTION_PACK[PLAYER_IS])
-	_process_input()
+		_process_input()
 	_action_process()
 	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
@@ -73,7 +79,7 @@ func _process_input():
 		state.Is.FLOATING:
 			pass
 		state.Is.CROUCHING:
-			if Input.is_action_just_pressed("jump"):
+			if Input.is_action_pressed("jump"):
 				_change_action(state.Action.SLIDE)
 			pass
 
