@@ -54,18 +54,12 @@ func _physics_process(delta):
 	else:
 		_change_action(PLAYER_ACTION_PACK[PLAYER_IS])
 		_process_input()
+	_process_attack()
 	_action_process()
 	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
 
-
 func _process_input():
-	if Input.is_action_just_pressed("left_hand"):
-		LEFT_HAND.attack()
-		pass
-	if Input.is_action_just_pressed("right_hand"):
-		RIGHT_HAND.attack()
-		pass
 	match PLAYER_IS:
 		state.Is.STANDING:
 			if Input.is_action_pressed("move_left"):
@@ -82,6 +76,15 @@ func _process_input():
 			if Input.is_action_pressed("jump"):
 				_change_action(state.Action.SLIDE)
 			pass
+
+func _process_attack():
+	if Input.is_action_just_pressed("left_hand"):
+		LEFT_HAND.attack()
+		pass
+	if Input.is_action_just_pressed("right_hand"):
+		RIGHT_HAND.attack()
+		pass
+	
 
 func _action_process():
 	match PLAYER_ACTION:
