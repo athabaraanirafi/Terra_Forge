@@ -9,45 +9,59 @@ enum Action {
 	SLIDE,
 	FALL,
 	LANDING,
-	CROUCH,
+	IDLE_CROUCH,
+}
+
+enum Is {
+	STANDING,
+	FLOATING,
+	CROUCHING,
 }
 
 # Jadi value disini korespon terhadap "lamanya" aksi itu nanti, per frame based
+# Fi, kamu bisa tweak sesuka hati pas testing dsb, this is the real reason i do it like this
 const Action_Pack = {
 	Action.RUN: {
 		"Frame": 1,
-		"Floor": Action.IDLE,
-		"Float": Action.FALL
-	},
-	Action.CROUCH: {
-		"Frame": 1,
-		"Floor": Action.IDLE,
-		"Float": Action.FALL
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.IDLE,
 	},
 	Action.IDLE: {
 		"Frame": 1,
-		"Floor": Action.IDLE,
-		"Float": Action.FALL
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.IDLE_CROUCH
+	},
+	Action.IDLE_CROUCH: {
+		"Frame": 1,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.IDLE_CROUCH
 	},
 	Action.JUMP: {
 		"Frame": 60,
-		"Floor": Action.LANDING,
-		"Float": Action.FALL
+		Is.STANDING: Action.LANDING,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.FALL
 	},
 	Action.FALL: {
 		"Frame": 1,
-		"Floor": Action.LANDING,
-		"Float": Action.FALL
+		Is.STANDING: Action.LANDING,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.LANDING,
 	},
 	Action.LANDING: {
 		"Frame": 25,
-		"Floor": Action.IDLE,
-		"Float": Action.FALL
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.IDLE_CROUCH,
 	},
 	Action.SLIDE: {
 		"Frame": 40,
-		"Floor": Action.IDLE,
-		"Float": Action.FALL
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.IDLE_CROUCH,
 	}
 }
 

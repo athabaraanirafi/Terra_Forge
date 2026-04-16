@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=73 format=2]
 
 [ext_resource path="res://player/script/main.gd" type="Script" id=1]
 [ext_resource path="res://player/spritesheet/run/run loop.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://player/spritesheet/jump/fall only.png" type="Texture" id=6]
 [ext_resource path="res://player/spritesheet/jump/landing only.png" type="Texture" id=7]
 [ext_resource path="res://player/spritesheet/slide/slide_at_home.png" type="Texture" id=8]
+[ext_resource path="res://player/script/hand.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 6 )
@@ -288,7 +289,10 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=12]
-extents = Vector2( 16.8333, 15.8333 )
+extents = Vector2( 15.3333, 4.16666 )
+
+[sub_resource type="RectangleShape2D" id=63]
+extents = Vector2( 10.8333, 21 )
 
 [node name="player" type="KinematicBody2D"]
 position = Vector2( 437, 318 )
@@ -297,13 +301,31 @@ script = ExtResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 11 )
-animation = "SLIDE"
+animation = "IDLE"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.833328, 5.83334 )
+[node name="PlayerBody" type="CollisionShape2D" parent="."]
+position = Vector2( -0.666672, 17.5 )
 shape = SubResource( 12 )
+one_way_collision = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( -85.3333, -104.333 )
 anchor_mode = 0
 current = true
+
+[node name="LeftHand" type="Node2D" parent="."]
+position = Vector2( 0, -0.666664 )
+script = ExtResource( 9 )
+
+[node name="RightHand" type="Node2D" parent="."]
+script = ExtResource( 9 )
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+input_pickable = false
+gravity_vec = Vector2( 0, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2( 0.5, -1 )
+shape = SubResource( 63 )

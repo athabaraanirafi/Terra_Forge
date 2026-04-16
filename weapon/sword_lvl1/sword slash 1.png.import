@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sword slash 1.png-ecf0f5b0bab86e7ef4091c437be358da.stex"
+path="res://.import/sword slash 1.png-db2454e34cd516b683772db233ac3942.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/spritesheet/melee/sword slash 1.png"
-dest_files=[ "res://.import/sword slash 1.png-ecf0f5b0bab86e7ef4091c437be358da.stex" ]
+source_file="res://weapon/sword_lvl1/sword slash 1.png"
+dest_files=[ "res://.import/sword slash 1.png-db2454e34cd516b683772db233ac3942.stex" ]
 
 [params]
 
