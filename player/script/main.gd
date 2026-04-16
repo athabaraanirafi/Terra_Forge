@@ -17,7 +17,6 @@ func _reassign_frame():
 	PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 
 func _change_action(action):
-	print(action)
 	PLAYER_ACTION = action
 	_reassign_frame()
 
@@ -28,31 +27,33 @@ func _change_dir(dir):
 		state.Dir.RIGHT:
 			PLAYER.flip_h = true
 	PLAYER_DIR = dir
-	
-func _ready():
-	_change_dir(PLAYER_DIR)
 
-func _physics_process(delta):
+func _process_position():
 	if is_on_floor():
 		if Input.is_action_pressed("crouch"):
 			PLAYER_IS = state.Is.CROUCHING
 		else:
 			PLAYER_IS = state.Is.STANDING
 	else:
-		PLAYER_IS = state.Is.FLOATING
-	
+		PLAYER_IS = state.Is.FLOATING	
+
+func _ready():
+	_change_dir(PLAYER_DIR)
+
+func _physics_process(delta):
+	_process_position()
 	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
 	if PLAYER_FRAME != 0:
 		PLAYER_FRAME -= 1
 	else:
 		_change_action(PLAYER_ACTION_PACK[PLAYER_IS])
-	process_input()
+	_process_input()
 	_action_process()
 	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
 
 
-func process_input():
+func _process_input():
 	if Input.is_action_just_pressed("left_hand"):
 		LEFT_HAND.attack()
 		pass
