@@ -67,13 +67,13 @@ const Action_Pack = {
 		Is.CROUCHING: Action.LANDING,
 	},
 	Action.LANDING: {
-		"Frame": 15,
+		"Frame": 20,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_IDLE,
 	},
 	Action.SLIDE: {
-		"Frame": 40,
+		"Frame": 20,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_IDLE,
@@ -84,4 +84,3 @@ enum Dir {
 	LEFT = -PLAYER_SPEED,
 	RIGHT = PLAYER_SPEED,
 }
-

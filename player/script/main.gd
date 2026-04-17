@@ -55,10 +55,23 @@ func _physics_process(delta):
 	else:
 		_change_action(PLAYER_ACTION_PACK[PLAYER_IS])
 		_process_input()
+	_cancellable_input()
 	_process_attack()
 	_action_process()
 	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
+
+func _cancellable_input():
+	match PLAYER_IS:
+		state.Is.STANDING:	
+			pass
+		state.Is.FLOATING:
+			pass
+		state.Is.CROUCHING:
+			if Input.is_action_just_pressed("jump") and PLAYER_ACTION != state.Action.SLIDE:
+				_change_action(state.Action.SLIDE)
+			pass
+
 
 func _process_input():
 	match PLAYER_IS:
@@ -74,8 +87,8 @@ func _process_input():
 		state.Is.FLOATING:
 			pass
 		state.Is.CROUCHING:
-			if Input.is_action_pressed("jump"):
-				_change_action(state.Action.SLIDE)
+			#if Input.is_action_pressed("jump") and PLAYER_ACTION != state.Action.SLIDE:
+			#	_change_action(state.Action.SLIDE)
 			pass
 
 func _process_attack():
@@ -96,8 +109,6 @@ func _action_process():
 			PLAYER.play("IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.CROUCH_IDLE:
-			#var shape = PLAYER_HURT_BOX.shape
-			#print(shape)
 			PLAYER.play("CROUCH_IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.CROUCH_UP:
