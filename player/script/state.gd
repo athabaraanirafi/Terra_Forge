@@ -1,5 +1,5 @@
 # Ini langsung ubah aja buat play test
-const PLAYER_SPEED = 200
+const PLAYER_SPEED = 260
 const JUMP_MOD = -200
 const COYOTE_FRAME = 20
 
@@ -84,3 +84,4 @@ enum Dir {
 	LEFT = -PLAYER_SPEED,
 	RIGHT = PLAYER_SPEED,
 }
+
