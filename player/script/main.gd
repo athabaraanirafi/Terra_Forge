@@ -8,6 +8,7 @@ onready var PLAYER_ACTION = state.Action.IDLE
 onready var PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
 onready var PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 onready var PLAYER = $AnimatedSprite
+onready var PLAYER_HURT_BOX = $HurtBox/CollisionShape2D
 onready var LEFT_HAND = $LeftHand
 onready var RIGHT_HAND = $RightHand
 onready var PLAYER_IS = state.Is.FLOATING
@@ -95,6 +96,8 @@ func _action_process():
 			PLAYER.play("IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.CROUCH_IDLE:
+			#var shape = PLAYER_HURT_BOX.shape
+			#print(shape)
 			PLAYER.play("CROUCH_IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.CROUCH_UP:

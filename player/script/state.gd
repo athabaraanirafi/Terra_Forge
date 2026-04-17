@@ -67,7 +67,7 @@ const Action_Pack = {
 		Is.CROUCHING: Action.LANDING,
 	},
 	Action.LANDING: {
-		"Frame": 20,
+		"Frame": 15,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_IDLE,
