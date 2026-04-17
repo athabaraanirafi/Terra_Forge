@@ -9,6 +9,8 @@ onready var PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
 onready var PLAYER_FRAME = PLAYER_ACTION_PACK.Frame
 onready var PLAYER = $AnimatedSprite
 onready var PLAYER_HURT_BOX = $HurtBox/CollisionShape2D
+onready var PLAYER_HURT_BOX_ANCHOR = Vector2(PLAYER_HURT_BOX.shape.extents.x, PLAYER_HURT_BOX.shape.extents.y)
+onready var PLAYER_HURT_BOX_ANCHOR_POS = Vector2(PLAYER_HURT_BOX.position)
 onready var LEFT_HAND = $LeftHand
 onready var RIGHT_HAND = $RightHand
 onready var PLAYER_IS = state.Is.FLOATING
@@ -49,6 +51,7 @@ func _ready():
 
 func _physics_process(delta):
 	_process_position()
+	_determine_hitbox()
 	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
 	if PLAYER_FRAME != 0:
 		PLAYER_FRAME -= 1
@@ -58,6 +61,7 @@ func _physics_process(delta):
 	_cancellable_input()
 	_process_attack()
 	_action_process()
+	#_determine_hitbox()
 	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
 
@@ -98,17 +102,30 @@ func _process_attack():
 	if Input.is_action_just_pressed("right_hand"):
 		RIGHT_HAND.attack()
 		pass
-	
+
+func _determine_hitbox():
+	match PLAYER_IS:
+		state.Is.STANDING:
+			var shape = PLAYER_HURT_BOX.shape
+			shape.extents = Vector2(PLAYER_HURT_BOX_ANCHOR.x, PLAYER_HURT_BOX_ANCHOR.y)
+			PLAYER_HURT_BOX.position = PLAYER_HURT_BOX_ANCHOR_POS
+		state.Is.FLOATING:
+			pass
+		state.Is.CROUCHING:
+			var shape = PLAYER_HURT_BOX.shape
+			shape.extents = Vector2(PLAYER_HURT_BOX_ANCHOR.x, PLAYER_HURT_BOX_ANCHOR.y / 2)
+			var offset = PLAYER_HURT_BOX_ANCHOR.y - shape.extents.y
+			PLAYER_HURT_BOX.position.y = offset
 
 func _action_process():
 	match PLAYER_ACTION:
 		state.Action.JUMP:
 			PLAYER.play("JUMP")
 			PLAYER_VELOCITY.y = state.JUMP_MOD
-		state.Action.IDLE:
+		state.Action.IDLE: 
 			PLAYER.play("IDLE")
 			PLAYER_VELOCITY.x = 0
-		state.Action.CROUCH_IDLE:
+		state.Action.CROUCH_IDLE: 
 			PLAYER.play("CROUCH_IDLE")
 			PLAYER_VELOCITY.x = 0
 		state.Action.CROUCH_UP:
@@ -125,3 +142,4 @@ func _action_process():
 			PLAYER_VELOCITY.x = PLAYER_DIR * 2
 		state.Action.LANDING:
 			PLAYER.play("LANDING")
+	
