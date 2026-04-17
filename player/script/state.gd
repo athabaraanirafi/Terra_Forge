@@ -10,7 +10,9 @@ enum Action {
 	SLIDE,
 	FALL,
 	LANDING,
-	IDLE_CROUCH,
+	CROUCH_START,
+	CROUCH_UP,
+	CROUCH_IDLE,
 }
 
 enum Is {
@@ -32,13 +34,25 @@ const Action_Pack = {
 		"Frame": 1,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
-		Is.CROUCHING: Action.IDLE_CROUCH
+		Is.CROUCHING: Action.CROUCH_START
 	},
-	Action.IDLE_CROUCH: {
+	Action.CROUCH_IDLE: {
 		"Frame": 1,
+		Is.STANDING: Action.CROUCH_UP,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_IDLE
+	},
+	Action.CROUCH_UP: {
+		"Frame": 15,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
-		Is.CROUCHING: Action.IDLE_CROUCH
+		Is.CROUCHING: Action.CROUCH_IDLE
+	},
+	Action.CROUCH_START: {
+		"Frame": 11,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_IDLE
 	},
 	Action.JUMP: {
 		"Frame": 60,
@@ -56,13 +70,13 @@ const Action_Pack = {
 		"Frame": 20,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
-		Is.CROUCHING: Action.IDLE_CROUCH,
+		Is.CROUCHING: Action.CROUCH_IDLE,
 	},
 	Action.SLIDE: {
 		"Frame": 40,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
-		Is.CROUCHING: Action.IDLE_CROUCH,
+		Is.CROUCHING: Action.CROUCH_IDLE,
 	}
 }
 

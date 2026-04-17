@@ -94,9 +94,13 @@ func _action_process():
 		state.Action.IDLE:
 			PLAYER.play("IDLE")
 			PLAYER_VELOCITY.x = 0
-		state.Action.IDLE_CROUCH:
-			PLAYER.play("IDLE")
+		state.Action.CROUCH_IDLE:
+			PLAYER.play("CROUCH_IDLE")
 			PLAYER_VELOCITY.x = 0
+		state.Action.CROUCH_UP:
+			PLAYER.play("CROUCH_UP")
+		state.Action.CROUCH_START:
+			PLAYER.play("CROUCH_START")
 		state.Action.FALL:
 			PLAYER.play("FALL")
 		state.Action.RUN:
