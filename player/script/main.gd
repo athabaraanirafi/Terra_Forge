@@ -147,20 +147,6 @@ func _change_hurtbox(hurt_box):
 			PLAYER_HURT_BOX.position.y = offset
 			pass
 
-# func _determine_hitbox():
-# 	match PLAYER_IS:
-# 		state.Is.STANDING:
-# 			var shape = PLAYER_HURT_BOX.shape
-# 			shape.extents = Vector2(PLAYER_HURT_BOX_ANCHOR.x, PLAYER_HURT_BOX_ANCHOR.y)
-# 			PLAYER_HURT_BOX.position = PLAYER_HURT_BOX_ANCHOR_POS
-# 		state.Is.FLOATING:
-# 			pass
-# 		state.Is.CROUCHING:
-# 			var shape = PLAYER_HURT_BOX.shape
-# 			shape.extents = Vector2(PLAYER_HURT_BOX_ANCHOR.x, PLAYER_HURT_BOX_ANCHOR.y / 2)
-# 			var offset = PLAYER_HURT_BOX_ANCHOR.y - shape.extents.y
-# 			PLAYER_HURT_BOX.position.y = offset
-
 func _action_process():
 	match PLAYER_ACTION:
 		state.Action.JUMP:
@@ -191,6 +177,10 @@ func _action_process():
 			_change_hurtbox(state.HurtBox.FULL)
 			PLAYER_VELOCITY.x = PLAYER_DIR
 			PLAYER.play("RUN_STARTUP")
+		state.Action.RUN_STOP:
+			_change_hurtbox(state.HurtBox.FULL)
+			PLAYER_VELOCITY.x = PLAYER_DIR / 26
+			PLAYER.play("RUN_STOP")
 		state.Action.SLIDE:
 			_change_hurtbox(state.HurtBox.HALF)
 			PLAYER.play("SLIDE")
