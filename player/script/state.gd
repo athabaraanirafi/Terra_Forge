@@ -6,6 +6,7 @@ const COYOTE_FRAME = 20
 enum Action {
 	RUN,
 	RUN_START,
+	RUN_STOP,
 	IDLE,
 	JUMP,
 	SLIDE,
@@ -32,12 +33,18 @@ enum HurtBox {
 const Action_Pack = {
 	Action.RUN: {
 		"Frame": 1,
-		Is.STANDING: Action.IDLE,
+		Is.STANDING: Action.RUN_STOP,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_START,
 	},
 	Action.RUN_START: {
 		"Frame": 22,
+		Is.STANDING: Action.RUN_STOP,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_START,
+	},
+	Action.RUN_STOP: {
+		"Frame": 12,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_START,
