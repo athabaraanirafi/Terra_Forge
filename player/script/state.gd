@@ -1,10 +1,11 @@
 # Ini langsung ubah aja buat play test
-const PLAYER_SPEED = 260
+const PLAYER_SPEED = 360
 const JUMP_MOD = -200
 const COYOTE_FRAME = 20
 
 enum Action {
 	RUN,
+	RUN_START,
 	IDLE,
 	JUMP,
 	SLIDE,
@@ -21,6 +22,11 @@ enum Is {
 	CROUCHING,
 }
 
+enum HurtBox {
+	FULL,
+	HALF,
+}
+
 # Jadi value disini korespon terhadap "lamanya" aksi itu nanti, per frame based
 # Fi, kamu bisa tweak sesuka hati pas testing dsb, this is the real reason i do it like this
 const Action_Pack = {
@@ -28,7 +34,13 @@ const Action_Pack = {
 		"Frame": 1,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
-		Is.CROUCHING: Action.IDLE,
+		Is.CROUCHING: Action.CROUCH_START,
+	},
+	Action.RUN_START: {
+		"Frame": 22,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_START,
 	},
 	Action.IDLE: {
 		"Frame": 1,
@@ -81,6 +93,14 @@ const Action_Pack = {
 }
 
 enum Dir {
-	LEFT = -PLAYER_SPEED,
+	LEFT = - PLAYER_SPEED,
 	RIGHT = PLAYER_SPEED,
 }
+
+# class Runnable:
+# 	func run() -> int:
+# 		return Action.IDLE
+
+# class Run:
+# 	func run(prev_action: int, current_dir: int, player_is: int):
+# 		pass
