@@ -27,7 +27,7 @@ func _change_action(action):
 	_reassign_frame()
 
 func _change_dir(dir) -> bool:
-	var changed = PLAYER_DIR == dir
+	var changed = PLAYER_DIR != dir
 	match dir:
 		state.Dir.LEFT:
 			PLAYER.flip_h = false
@@ -89,41 +89,53 @@ func _cancellable_input():
 				_change_action(state.Action.SLIDE)
 			pass
 
+func _process_move():
+	match PLAYER_LAST_ACTION:
+		state.Action.IDLE:
+			_change_action(state.Action.RUN_START)
+			pass
+		state.Action.RUN_START:
+			# if dir_changed:
+				# _change_action(state.Action.RUN_FLIP)
+			# else:
+			_change_action(state.Action.RUN)
+			# pass
+		state.Action.RUN:
+			# if dir_changed:
+				# _change_action(state.Action.RUN_FLIP)
+			# else:
+			_change_action(state.Action.RUN)
+			# pass
+
 
 func _process_input():
 	match PLAYER_IS:
 		state.Is.STANDING:
+			# if Input.is_action_just_pressed("move_left"):
+			# 	if _change_dir(state.Dir.LEFT):
+			# 		return
+			# elif Input.is_action_just_pressed("move_right"):
+			# 	if _change_dir(state.Dir.RIGHT):
+			# 		return
+			# 	# _process_move()
 			if Input.is_action_pressed("move_left"):
-				match PLAYER_LAST_ACTION:
-					state.Action.IDLE:
-						_change_action(state.Action.RUN_START)
-						pass
-					state.Action.RUN_START:
-						_change_action(state.Action.RUN)
-						pass
-					state.Action.RUN:
-						_change_action(state.Action.RUN)
-						pass
 				_change_dir(state.Dir.LEFT)
+					# print("here")
+					# return
+				_process_move()
 			elif Input.is_action_pressed("move_right"):
-				match PLAYER_LAST_ACTION:
-					state.Action.IDLE:
-						_change_action(state.Action.RUN_START)
-						pass
-					state.Action.RUN_START:
-						_change_action(state.Action.RUN)
-						pass
-					state.Action.RUN:
-						_change_action(state.Action.RUN)
-						pass
 				_change_dir(state.Dir.RIGHT)
-			
+					# print("here")
+					# return
+				_process_move()
+
 		state.Is.FLOATING:
 			pass
 		state.Is.CROUCHING:
-			#if Input.is_action_pressed("jump") and PLAYER_ACTION != state.Action.SLIDE:
-			#	_change_action(state.Action.SLIDE)
-			pass
+			if Input.is_action_pressed("move_left"):
+				_change_dir(state.Dir.LEFT)
+			elif Input.is_action_pressed("move_right"):
+				_change_dir(state.Dir.RIGHT)
 
 func _process_attack():
 	if Input.is_action_just_pressed("left_hand"):
@@ -179,8 +191,13 @@ func _action_process():
 			PLAYER.play("RUN_STARTUP")
 		state.Action.RUN_STOP:
 			_change_hurtbox(state.HurtBox.FULL)
-			PLAYER_VELOCITY.x = PLAYER_DIR / 26
+			PLAYER_VELOCITY.x = PLAYER_DIR / 2
 			PLAYER.play("RUN_STOP")
+		state.Action.RUN_FLIP:
+			_change_hurtbox(state.HurtBox.FULL)
+			PLAYER_VELOCITY.x = PLAYER_DIR / 26
+			# print("flipped!")
+			PLAYER.play("RUN_FLIP")
 		state.Action.SLIDE:
 			_change_hurtbox(state.HurtBox.HALF)
 			PLAYER.play("SLIDE")

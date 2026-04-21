@@ -7,6 +7,7 @@ enum Action {
 	RUN,
 	RUN_START,
 	RUN_STOP,
+	RUN_FLIP,
 	IDLE,
 	JUMP,
 	SLIDE,
@@ -44,6 +45,12 @@ const Action_Pack = {
 		Is.CROUCHING: Action.CROUCH_START,
 	},
 	Action.RUN_STOP: {
+		"Frame": 12,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_START,
+	},
+	Action.RUN_FLIP: {
 		"Frame": 12,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
