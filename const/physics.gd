@@ -1,3 +1,3 @@
 class_name Physics
 
-const GRAVITY = 1500
+const GRAVITY = 2500

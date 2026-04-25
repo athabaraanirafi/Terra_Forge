@@ -55,7 +55,8 @@ func _ready():
 
 func _physics_process(delta):
 	_process_position()
-	PLAYER_VELOCITY.y += Physics.GRAVITY * delta
+	if PLAYER_ACTION != state.Action.JUMP:
+		PLAYER_VELOCITY.y += Physics.GRAVITY * delta
 	if PLAYER_FRAME != 0:
 		PLAYER_FRAME -= 1
 	else:
@@ -73,7 +74,19 @@ func _cancellable_input():
 	match PLAYER_IS:
 		state.Is.STANDING:
 			if Input.is_action_pressed("jump"):
+				PLAYER_VELOCITY.y += state.JUMP_BOOST
 				_change_action(state.Action.JUMP)
+			pass
+			#if PLAYER_ACTION != state.Action.JUMP:
+			#match PLAYER_LAST_ACTION:
+			#	state.Action.JUMP_START:
+					
+			#	_:
+			#		if Input.is_action_pressed("jump"):
+					#PLAYER_VELOCITY.y += state.JUMP_BOOST
+			#			_change_action(state.Action.JUMP_START)
+			#		pass
+					
 			pass
 		state.Is.FLOATING:
 			if Input.is_action_pressed("move_right"):
@@ -163,7 +176,13 @@ func _action_process():
 	match PLAYER_ACTION:
 		state.Action.JUMP:
 			PLAYER.play("JUMP")
-			PLAYER_VELOCITY.y = state.JUMP_MOD
+			#$if PLAYER_VELOCITY.y < -500:
+			#	PLAYER_VELOCITY.y = -500
+			#	return
+			PLAYER_VELOCITY.y += state.JUMP_MOD
+		state.Action.JUMP_START:
+			PLAYER.play("JUMP")
+			PLAYER_VELOCITY.y += state.JUMP_BOOST			
 		state.Action.IDLE:
 			_change_hurtbox(state.HurtBox.FULL)
 			PLAYER.play("IDLE")
