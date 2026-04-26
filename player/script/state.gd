@@ -49,7 +49,7 @@ const Action_Pack = {
 		Is.CROUCHING: Action.CROUCH_START,
 	},
 	Action.RUN_STOP: {
-		"Frame": 12,
+		"Frame": 35,
 		Is.STANDING: Action.IDLE,
 		Is.FLOATING: Action.FALL,
 		Is.CROUCHING: Action.CROUCH_START,

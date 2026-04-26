@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/run stop.png-89627d974d5f041b72475e18ff0b3f3e.stex"
+path="res://.import/crook 1 projektil.png-cbcd9f90e058f617b8a7bafcd48cf643.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/spritesheet/run/run stop.png"
-dest_files=[ "res://.import/run stop.png-89627d974d5f041b72475e18ff0b3f3e.stex" ]
+source_file="res://enemy/crook 1/shoot/crook 1 projektil.png"
+dest_files=[ "res://.import/crook 1 projektil.png-cbcd9f90e058f617b8a7bafcd48cf643.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
