@@ -176,9 +176,6 @@ func _action_process():
 	match PLAYER_ACTION:
 		state.Action.JUMP:
 			PLAYER.play("JUMP")
-			#$if PLAYER_VELOCITY.y < -500:
-			#	PLAYER_VELOCITY.y = -500
-			#	return
 			PLAYER_VELOCITY.y += state.JUMP_MOD
 		state.Action.JUMP_START:
 			PLAYER.play("JUMP")
@@ -199,6 +196,7 @@ func _action_process():
 			PLAYER.play("CROUCH_START")
 		state.Action.FALL:
 			_change_hurtbox(state.HurtBox.FULL)
+			PLAYER_VELOCITY.y += state.FALL_MOD
 			PLAYER.play("FALL")
 		state.Action.RUN:
 			_change_hurtbox(state.HurtBox.FULL)

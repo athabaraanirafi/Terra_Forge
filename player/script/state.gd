@@ -1,8 +1,10 @@
 # Ini langsung ubah aja buat play test
 const PLAYER_SPEED = 300
-const JUMP_MOD = -7
-const JUMP_BOOST = -100
-const COYOTE_FRAME = 12
+# idk, i think this feels good?
+const JUMP_MOD = -8
+const FALL_MOD = 18
+const JUMP_BOOST = -80
+const COYOTE_FRAME = 5
 
 enum Action {
 	RUN,
