@@ -51,6 +51,7 @@ func _process_position():
 			PLAYER_IS = state.Is.FLOATING
 
 func _ready():
+	Player.PLAYER = self
 	_change_dir(PLAYER_DIR)
 
 func _physics_process(delta):
