@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/crook 1 idle.png-dc6758ba53fe2e0fab9cec6b5b30aaed.stex"
+path="res://.import/crook 1 projektil.png-502f958e9eb9d4e797b8265455a6222c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://enemy/crook 1/idle/crook 1 idle.png"
-dest_files=[ "res://.import/crook 1 idle.png-dc6758ba53fe2e0fab9cec6b5b30aaed.stex" ]
+source_file="res://enemy/crook_simple/sprite/shoot/crook 1 projektil.png"
+dest_files=[ "res://.import/crook 1 projektil.png-502f958e9eb9d4e797b8265455a6222c.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
