@@ -1,16 +1,36 @@
-extends KinematicBody2D
+# TO-DO: Implement the bullet animation and movement, maybe also add some explodification
+# TO-DO: Mungkin bullet scene itu di attach sekalian sama crook biar gak perlu di load 
+# TO-DO: pas keluar.
+# TO-DO: Which does makes it easier buat naruh posisi keluarnya dimana.
+# TO-DO: Oh ya, kalau ACTIVE == false. ini object jadi inert (gak kelihatan) sekalian.
+# TO-DO: Terus kalau udah nabrak object atau keluar dari layar ini object
+# TO-DO: langsung dibalikin ke Crook terus dijadiin inert. 
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+extends Area2D
 
+const include = preload("res://enemy/crook_simple/script/include.gd")
 
-# Called when the node enters the scene tree for the first time.
+onready var BULLET = $AnimatedSprite
+onready var DIR = include.Dir.LEFT
+onready var ACTIVE = false
+
 func _ready():
-	pass # Replace with function body.
+	ACTIVE = false
+	pass
+	
+func _shoot(dir):
+	DIR = dir
+	match DIR:
+		include.Dir.RIGHT:
+			BULLET.flip_h = true
+		include.Dir.LEFT:
+			BULLET.flip_h = false
+	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _physics_process(delta):
+	if !ACTIVE:
+		return
+	self.position.x += DIR * delta
+	ACTIVE.play("FLYING")	
+	pass
