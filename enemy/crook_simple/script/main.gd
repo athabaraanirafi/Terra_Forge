@@ -1,23 +1,15 @@
 extends KinematicBody2D
 
-const SPEED = 400
+const include = preload("res://enemy/crook_simple/script/include.gd")
+
 const RANGE = 400
 const PERSONAL_SPACE = 200
-enum Dir {
-	LEFT = -SPEED,
-	RIGHT = SPEED
-}
 
 enum Player_Is {
 	NO_PROBLEM,
 	TOO_CLOSE,
 	TOO_FAR,
 	IN_RANGE,
-}
-
-enum Temper {
-	AGRRO,
-	CHILL,
 }
 
 enum Action {
@@ -64,15 +56,15 @@ onready var PLAYER_IS = Player_Is.NO_PROBLEM
 onready var ACTION = Action.IDLE
 onready var ACTION_PACK = Action_Pack[ACTION]
 onready var FRAME = ACTION_PACK.Frame
-onready var DIR = Dir.RIGHT
+onready var DIR = include.Dir.RIGHT
 
 func _opposite() -> int:
 	var dir
 	match DIR:
-		Dir.RIGHT:
-			dir = Dir.LEFT
-		Dir.LEFT:
-			dir = Dir.RIGHT
+		include.Dir.RIGHT:
+			dir = include.Dir.LEFT
+		include.Dir.LEFT:
+			dir = include.Dir.RIGHT
 	return dir
 
 func _reassign_frame():
@@ -108,11 +100,11 @@ func _player_is():
 
 func _change_dir():
 	if Player.PLAYER.position.x > self.position.x:
-		DIR = Dir.RIGHT
+		DIR = include.Dir.RIGHT
 		CROOK.flip_h = true
 		pass
 	else:
-		DIR = Dir.LEFT
+		DIR = include.Dir.LEFT
 		CROOK.flip_h = false
 	pass
 

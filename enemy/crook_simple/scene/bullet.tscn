@@ -40,8 +40,10 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=9]
+radius = 4.12311
 
-[node name="bullet" type="KinematicBody2D"]
+[node name="bullet" type="Area2D"]
+scale = Vector2( 3, 3 )
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
@@ -49,4 +51,5 @@ frames = SubResource( 8 )
 animation = "FLYING"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 1.66667, 0.333333 )
 shape = SubResource( 9 )
