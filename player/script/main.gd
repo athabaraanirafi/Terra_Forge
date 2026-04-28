@@ -78,16 +78,6 @@ func _cancellable_input():
 				PLAYER_VELOCITY.y += state.JUMP_BOOST
 				_change_action(state.Action.JUMP)
 			pass
-			#if PLAYER_ACTION != state.Action.JUMP:
-			#match PLAYER_LAST_ACTION:
-			#	state.Action.JUMP_START:
-					
-			#	_:
-			#		if Input.is_action_pressed("jump"):
-					#PLAYER_VELOCITY.y += state.JUMP_BOOST
-			#			_change_action(state.Action.JUMP_START)
-			#		pass
-					
 			pass
 		state.Is.FLOATING:
 			if Input.is_action_pressed("move_right"):

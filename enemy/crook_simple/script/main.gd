@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 const include = preload("res://enemy/crook_simple/script/include.gd")
-
+const Bullet = preload("res://enemy/crook_simple/scene/bullet.tscn")
 const RANGE = 400
 const PERSONAL_SPACE = 200
 
@@ -35,7 +35,7 @@ const Action_Pack = {
 		Player_Is.IN_RANGE: Action.SHOOTING
 	},
 	Action.SHOOTING: {
-		"Frame": 12,
+		"Frame": 60,
 		Player_Is.NO_PROBLEM: Action.IDLE,
 		Player_Is.TOO_CLOSE: Action.BACK_AWAY,
 		Player_Is.TOO_FAR: Action.PURSUE,
@@ -57,6 +57,7 @@ onready var ACTION = Action.IDLE
 onready var ACTION_PACK = Action_Pack[ACTION]
 onready var FRAME = ACTION_PACK.Frame
 onready var DIR = include.Dir.RIGHT
+onready var MUZZLE = $Muzzle
 
 func _opposite() -> int:
 	var dir
@@ -128,10 +129,22 @@ func _process_action():
 			CROOK.play("PURSUE")
 			VELOCITY.x = DIR
 		Action.SHOOTING:
-			VELOCITY.x = 0
+			match FRAME:
+				20:
+					_shoot()
+				40:
+					_shoot()
+				60:
+					_shoot()
 			CROOK.play("SHOOT")
 		Action.BACK_AWAY:
 			VELOCITY.x = _opposite()
 			CROOK.play("PURSUE")
 			
-			
+func _shoot():
+	var bullet = Bullet.instance()
+	bullet.global_position = MUZZLE.global_position
+	get_tree().current_scene.add_child(bullet)
+	bullet.shoot(DIR)
+	VELOCITY.x = 0
+	

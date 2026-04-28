@@ -92,7 +92,7 @@ animations = [ {
 "frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
 "loop": true,
 "name": "SHOOT",
-"speed": 5.0
+"speed": 20.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -123,3 +123,6 @@ gravity_vec = Vector2( 0, 0 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2( 5.66667, 0 )
 shape = SubResource( 3 )
+
+[node name="Muzzle" type="Position2D" parent="."]
+position = Vector2( -27.3333, -3 )

@@ -32,6 +32,7 @@ Player="*res://global/player.gd"
 
 window/size/width=640
 window/size/height=360
+window/size/fullscreen=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
