@@ -1,18 +1,21 @@
 extends Node2D
 
-const weapon = preload("res://weapon/weapon.gd")
+const state = preload("res://player/script/state.gd")
 
-var CURRENT_WEAPON
+var WEAPON_SLOT = {
+	state.Hand.LEFT: null,
+	state.Hand.RIGHT: null,
+}
 
-func _ready():
-	load_weapon(weapon.ID.Basic_Sword)
-	
-func load_weapon(weapon_id):
-	if CURRENT_WEAPON:
-		self.queue_free()
-	CURRENT_WEAPON = load(weapon.LIST[weapon_id].Path).instance()
-	self.add_child(CURRENT_WEAPON)
+var ACTIVE_HAND = state.Hand.LEFT
 
-func attack():
-	print("attack!")
+func activate(which_hand, player_dir, player_is, player_action) -> int:
+	ACTIVE_HAND = which_hand
+	return WEAPON_SLOT[ACTIVE_HAND].activate(player_dir, player_is, player_action)
+
+func deactivate():
+	WEAPON_SLOT[ACTIVE_HAND].deactivate()
+
+func attack(frame) -> int:
+	return WEAPON_SLOT[ACTIVE_HAND].attack(frame)
 	pass

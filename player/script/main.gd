@@ -12,10 +12,10 @@ onready var PLAYER = $AnimatedSprite
 onready var PLAYER_HURT_BOX = $HurtBox/CollisionShape2D
 onready var PLAYER_HURT_BOX_ANCHOR = Vector2(PLAYER_HURT_BOX.shape.extents.x, PLAYER_HURT_BOX.shape.extents.y)
 onready var PLAYER_HURT_BOX_ANCHOR_POS = Vector2(PLAYER_HURT_BOX.position)
-onready var LEFT_HAND = $LeftHand
-onready var RIGHT_HAND = $RightHand
+onready var WEAPON = $Weapon
 onready var PLAYER_IS = state.Is.FLOATING
 onready var COYOTE_FRAME = state.COYOTE_FRAME
+# onready var ATTACK = $Attack
 
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
@@ -66,9 +66,6 @@ func _physics_process(delta):
 	_cancellable_input()
 	_process_attack()
 	_action_process()
-	# _determine_hitbox()
-	#_determine_hitbox()
-	#PLAYER.play("LANDING")
 	PLAYER_VELOCITY = move_and_slide(PLAYER_VELOCITY, Vector2.UP)
 
 func _cancellable_input():
@@ -115,13 +112,6 @@ func _process_move():
 func _process_input():
 	match PLAYER_IS:
 		state.Is.STANDING:
-			# if Input.is_action_just_pressed("move_left"):
-			# 	if _change_dir(state.Dir.LEFT):
-			# 		return
-			# elif Input.is_action_just_pressed("move_right"):
-			# 	if _change_dir(state.Dir.RIGHT):
-			# 		return
-			# 	# _process_move()
 			if Input.is_action_pressed("move_left"):
 				_change_dir(state.Dir.LEFT)
 					# print("here")
@@ -142,12 +132,19 @@ func _process_input():
 				_change_dir(state.Dir.RIGHT)
 
 func _process_attack():
-	if Input.is_action_just_pressed("left_hand"):
-		LEFT_HAND.attack()
-		pass
-	if Input.is_action_just_pressed("right_hand"):
-		RIGHT_HAND.attack()
-		pass
+	if PLAYER_ACTION != state.Action.ATTACK:
+		if Input.is_action_just_pressed("left_hand"):
+			var frame = WEAPON.activate(state.Hand.LEFT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
+			_change_action(state.Action.ATTACK)
+			PLAYER_FRAME = frame
+			PLAYER.hide()
+			pass
+		elif Input.is_action_just_pressed("right_hand"):
+			var frame = WEAPON.activate(state.Hand.RIGHT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
+			_change_action(state.Action.ATTACK)
+			PLAYER_FRAME = frame
+			PLAYER.hide()
+			pass
 
 func _change_hurtbox(hurt_box):
 	match hurt_box:
@@ -204,7 +201,6 @@ func _action_process():
 		state.Action.RUN_FLIP:
 			_change_hurtbox(state.HurtBox.FULL)
 			PLAYER_VELOCITY.x = PLAYER_DIR / 26
-			# print("flipped!")
 			PLAYER.play("RUN_FLIP")
 		state.Action.SLIDE:
 			_change_hurtbox(state.HurtBox.HALF)
@@ -214,3 +210,11 @@ func _action_process():
 			_change_hurtbox(state.HurtBox.FULL)
 			PLAYER_VELOCITY.x = 0
 			PLAYER.play("LANDING")
+		state.Action.ATTACK:
+			match WEAPON.attack():
+				state.Weapon.HIDDEN:
+					WEAPON.deactivate()
+					PLAYER.show()
+				state.Weapon.ACTIVE:
+					pass
+			pass
