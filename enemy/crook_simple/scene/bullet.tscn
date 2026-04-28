@@ -53,3 +53,5 @@ animation = "FLYING"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 1.66667, 0.333333 )
 shape = SubResource( 9 )
+
+[node name="OnScreen" type="VisibilityNotifier2D" parent="."]

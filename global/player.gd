@@ -1,3 +1,11 @@
+# TO-DO: Bikin proper protocol dan framework buat hit mask.
+# TO-DO: Bedain physics hit box, hurt box, weapon/projectile hit box dsb
+# TO-DO: Ini harus hati karena ini bakal merambah kemana mana, dari weapon sampai 
+# TO-DO: apakah enemy bisa "dilewati" dsb
+# TO-DO: 
+# TO-DO: (Assigned-for (Effendi))
+
+
 extends Node
 
 signal SIG_PLAYER(num)
