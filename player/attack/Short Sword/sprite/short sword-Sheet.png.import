@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Grave Reaver.png-6e8fc515a1f544a682ba799f35f4a093.stex"
+path="res://.import/short sword-Sheet.png-25cb187c12435c2dd4812211ab9a2331.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/spritesheet/melee/Grave Reaver.png"
-dest_files=[ "res://.import/Grave Reaver.png-6e8fc515a1f544a682ba799f35f4a093.stex" ]
+source_file="res://player/attack/Short Sword/sprite/short sword-Sheet.png"
+dest_files=[ "res://.import/short sword-Sheet.png-25cb187c12435c2dd4812211ab9a2331.stex" ]
 
 [params]
 

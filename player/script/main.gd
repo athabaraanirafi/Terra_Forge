@@ -137,13 +137,13 @@ func _process_attack():
 			var frame = WEAPON.activate(state.Hand.LEFT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
-			PLAYER.hide()
+			# PLAYER.hide()
 			pass
 		elif Input.is_action_just_pressed("right_hand"):
 			var frame = WEAPON.activate(state.Hand.RIGHT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
-			PLAYER.hide()
+			# PLAYER.hide()
 			pass
 
 func _change_hurtbox(hurt_box):
@@ -216,5 +216,5 @@ func _action_process():
 					WEAPON.deactivate()
 					PLAYER.show()
 				state.Weapon.ACTIVE:
+					PLAYER.hide()
 					pass
-			pass

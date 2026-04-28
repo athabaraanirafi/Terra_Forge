@@ -503,6 +503,4 @@ gravity_vec = Vector2( 0, 0 )
 position = Vector2( 0.5, -1 )
 shape = SubResource( 63 )
 
-[node name="LeftHand" type="Node2D" parent="."]
-
-[node name="RightHand" type="Node2D" parent="."]
+[node name="Weapon" type="Node2D" parent="."]
