@@ -20,6 +20,7 @@ enum Action {
 	CROUCH_START,
 	CROUCH_UP,
 	CROUCH_IDLE,
+	ATTACK,
 }
 
 enum Is {
@@ -36,6 +37,14 @@ enum HurtBox {
 # Jadi value disini korespon terhadap "lamanya" aksi itu nanti, per frame based
 # Fi, kamu bisa tweak sesuka hati pas testing dsb, this is the real reason i do it like this
 const Action_Pack = {
+	Action.ATTACK: {
+		# Listen, gdscript are weird. Meskipun ini const, kamu tetep bisa mutasi value dict-nya
+		# And i plan to use that little quirk
+		"Frame": 1,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_START,	
+	},
 	Action.RUN: {
 		"Frame": 1,
 		Is.STANDING: Action.RUN_STOP,
@@ -121,10 +130,12 @@ enum Dir {
 	RIGHT = PLAYER_SPEED,
 }
 
-# class Runnable:
-# 	func run() -> int:
-# 		return Action.IDLE
+enum Hand {
+	LEFT,
+	RIGHT,
+}
 
-# class Run:
-# 	func run(prev_action: int, current_dir: int, player_is: int):
-# 		pass
+enum Weapon {
+	ACTIVE,
+	HIDDEN,
+}
