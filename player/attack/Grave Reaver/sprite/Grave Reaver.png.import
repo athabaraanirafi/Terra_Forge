@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Grave Reaver.png-9363c19f43d3cfd7c83e33f795c1905d.stex"
+path="res://.import/Grave Reaver.png-d91cb15bc0e33deecb9719736f942aec.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://player/attack/Grave Reaver/Grave Reaver.png"
-dest_files=[ "res://.import/Grave Reaver.png-9363c19f43d3cfd7c83e33f795c1905d.stex" ]
+source_file="res://player/attack/Grave Reaver/sprite/Grave Reaver.png"
+dest_files=[ "res://.import/Grave Reaver.png-d91cb15bc0e33deecb9719736f942aec.stex" ]
 
 [params]
 
