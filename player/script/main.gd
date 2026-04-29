@@ -12,7 +12,7 @@ onready var PLAYER = $AnimatedSprite
 onready var PLAYER_HURT_BOX = $HurtBox/CollisionShape2D
 onready var PLAYER_HURT_BOX_ANCHOR = Vector2(PLAYER_HURT_BOX.shape.extents.x, PLAYER_HURT_BOX.shape.extents.y)
 onready var PLAYER_HURT_BOX_ANCHOR_POS = Vector2(PLAYER_HURT_BOX.position)
-onready var WEAPON = $Weapon
+onready var HAND = $Hand
 onready var PLAYER_IS = state.Is.FLOATING
 onready var COYOTE_FRAME = state.COYOTE_FRAME
 # onready var ATTACK = $Attack
@@ -134,13 +134,13 @@ func _process_input():
 func _process_attack():
 	if PLAYER_ACTION != state.Action.ATTACK:
 		if Input.is_action_just_pressed("left_hand"):
-			var frame = WEAPON.activate(state.Hand.LEFT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
+			var frame = HAND.activate(state.Hand.LEFT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
 			# PLAYER.hide()
 			pass
 		elif Input.is_action_just_pressed("right_hand"):
-			var frame = WEAPON.activate(state.Hand.RIGHT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
+			var frame = HAND.activate(state.Hand.RIGHT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
 			# PLAYER.hide()
@@ -211,9 +211,9 @@ func _action_process():
 			PLAYER_VELOCITY.x = 0
 			PLAYER.play("LANDING")
 		state.Action.ATTACK:
-			match WEAPON.attack():
+			match HAND.attack(PLAYER_FRAME):
 				state.Weapon.HIDDEN:
-					WEAPON.deactivate()
+					HAND.deactivate()
 					PLAYER.show()
 				state.Weapon.ACTIVE:
 					PLAYER.hide()

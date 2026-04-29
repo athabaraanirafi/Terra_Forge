@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=2]
+[gd_scene load_steps=115 format=2]
 
 [ext_resource path="res://player/script/main.gd" type="Script" id=1]
 [ext_resource path="res://player/spritesheet/run/run loop.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://player/spritesheet/jump/fall only.png" type="Texture" id=6]
 [ext_resource path="res://player/spritesheet/jump/landing only.png" type="Texture" id=7]
 [ext_resource path="res://player/spritesheet/slide/slide.png" type="Texture" id=8]
+[ext_resource path="res://player/script/hand.gd" type="Script" id=9]
 [ext_resource path="res://player/spritesheet/crouch/crouch idle.png" type="Texture" id=10]
 [ext_resource path="res://player/spritesheet/crouch/crouch upt.png" type="Texture" id=11]
 [ext_resource path="res://player/spritesheet/crouch/crouch.png" type="Texture" id=12]
@@ -503,4 +504,5 @@ gravity_vec = Vector2( 0, 0 )
 position = Vector2( 0.5, -1 )
 shape = SubResource( 63 )
 
-[node name="Weapon" type="Node2D" parent="."]
+[node name="Hand" type="Node2D" parent="."]
+script = ExtResource( 9 )
