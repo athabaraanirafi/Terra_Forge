@@ -15,7 +15,6 @@ onready var PLAYER_HURT_BOX_ANCHOR_POS = Vector2(PLAYER_HURT_BOX.position)
 onready var HAND = $Hand
 onready var PLAYER_IS = state.Is.FLOATING
 onready var COYOTE_FRAME = state.COYOTE_FRAME
-# onready var ATTACK = $Attack
 
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
