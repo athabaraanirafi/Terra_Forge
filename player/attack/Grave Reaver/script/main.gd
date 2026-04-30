@@ -3,42 +3,49 @@ extends Node2D
 const state = preload("res://player/script/state.gd")
 
 const FRAME = 30
-onready var SPRITE = $AnimatedSprite
+var HIT = 0
+# this is temporary. you can create a logic to parse the given state provided by the caller
+# to determine which sprite node to call
+onready var SPRITE = null
+onready var HIT_BOX = null
 
-# func _set_activation_state(state):
-	
-	# set_process(state)
-	# set_physics_process(state)
-	# visible = state
+func _deactivate():
+	SPRITE.hide()
+	HIT_BOX.monitoring = false
 
+
+func _activate():
+	SPRITE.show()
+	HIT_BOX.monitoring = true
 
 func _ready():
-	SPRITE.hide()
-	# _set_activation_state(false)
-	pass # Replace with function body.
+	_pick_frame(0,0)
+	_deactivate()
+	pass
 
-# func _physics_process(_delta):
 
-func activate(player_dir, player_is, player_action) -> int:
-	# _set_activation_state(true)
+func _pick_frame(player_is, player_action):
+	# Temporary animation because there's currently only one
+	SPRITE = $DefaultAttack
+	HIT_BOX = $DefaultAttack/HitBox
 	
-	# func _change_dir(dir) -> bool:
-		# var changed = PLAYER_DIR != dir
+func activate(player_dir, player_is, player_action) -> int:
+	HIT = 1
+	_pick_frame(player_is, player_action)
 	match player_dir:
 		state.Dir.LEFT:
-			SPRITE.flip_h = false
+			self.scale.x = 1
+			# SPRITE.flip_h = false
 		state.Dir.RIGHT:
-			SPRITE.flip_h = true
-		# PLAYER_DIR = dir
-		# return changed
-	# if SPRITE == null: 
-	# 	print("null!")
-	# 	return 0
-	SPRITE.show()
+			self.scale.x = -1
+			# SPRITE.flip_h = true
+	_activate()
+	# SPRITE.show()
 	return FRAME
 
 func deactivate():
-	SPRITE.hide()
+	HIT = 0
+	_deactivate()
 	# _set_activation_state(false)
 
 func attack(frame) -> int:
@@ -48,9 +55,14 @@ func attack(frame) -> int:
 	else:
 		SPRITE.hide()
 		SPRITE.frame = 0
-		# _set_activation_state(false)
 		return state.Weapon.HIDDEN
 
 func _active_frame(_frame):
 	SPRITE.play("DEFAULT_ATTACK")
 
+func _hit_something(body):	
+	body.deal_damage(0)
+	body.deal_push_back(Vector2(10, 0))
+	body.deal_stun(20)
+
+	pass 
