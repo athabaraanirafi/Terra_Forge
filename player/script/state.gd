@@ -21,6 +21,7 @@ enum Action {
 	CROUCH_UP,
 	CROUCH_IDLE,
 	ATTACK,
+	STUN,
 }
 
 enum Is {
@@ -37,6 +38,12 @@ enum HurtBox {
 # Jadi value disini korespon terhadap "lamanya" aksi itu nanti, per frame based
 # Fi, kamu bisa tweak sesuka hati pas testing dsb, this is the real reason i do it like this
 const Action_Pack = {
+	Action.STUN: {
+		"Frame": 1,
+		Is.STANDING: Action.IDLE,
+		Is.FLOATING: Action.FALL,
+		Is.CROUCHING: Action.CROUCH_START,	
+	},
 	Action.ATTACK: {
 		# Listen, gdscript are weird. Meskipun ini const, kamu tetep bisa mutasi value dict-nya
 		# And i plan to use that little quirk

@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 const state = preload("res://player/script/state.gd")
+const sig = preload("res://player/attack/sig-def.gd")
 
 onready var PLAYER_DIR = state.Dir.RIGHT
 onready var PLAYER_VELOCITY = Vector2()
@@ -15,6 +16,7 @@ onready var PLAYER_HURT_BOX_ANCHOR_POS = Vector2(PLAYER_HURT_BOX.position)
 onready var HAND = $Hand
 onready var PLAYER_IS = state.Is.FLOATING
 onready var COYOTE_FRAME = state.COYOTE_FRAME
+onready var HURT_BOX = $HurtBox
 
 func _reassign_frame():
 	PLAYER_ACTION_PACK = state.Action_Pack[PLAYER_ACTION]
@@ -51,7 +53,17 @@ func _process_position():
 
 func _ready():
 	Player.PLAYER = self
+	HURT_BOX.connect(sig.DEAL_STUN, self, "_on_stun")
 	_change_dir(PLAYER_DIR)
+
+func _on_stun(time):
+	_cancel_attack()
+	_change_action(state.Action.STUN)
+	PLAYER_FRAME = time
+
+func _cancel_attack():
+	HAND.deactivate()
+	PLAYER.show()
 
 func _physics_process(delta):
 	_process_position()
@@ -73,7 +85,7 @@ func _cancellable_input():
 			if Input.is_action_pressed("jump"):
 				PLAYER_VELOCITY.y += state.JUMP_BOOST
 				_change_action(state.Action.JUMP)
-			pass
+				_cancel_attack()
 			pass
 		state.Is.FLOATING:
 			if Input.is_action_pressed("move_right"):
@@ -109,6 +121,7 @@ func _process_move():
 
 
 func _process_input():
+
 	match PLAYER_IS:
 		state.Is.STANDING:
 			if Input.is_action_pressed("move_left"):
@@ -130,20 +143,24 @@ func _process_input():
 			elif Input.is_action_pressed("move_right"):
 				_change_dir(state.Dir.RIGHT)
 
+
 func _process_attack():
 	if PLAYER_ACTION != state.Action.ATTACK:
-		if Input.is_action_just_pressed("left_hand"):
+		if Input.is_action_pressed("left_hand"):
 			var frame = HAND.activate(state.Hand.LEFT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
-			# PLAYER.hide()
+			# print("Left!")
+			# print(frame)
+			#PLAYER.hide()
 			pass
-		elif Input.is_action_just_pressed("right_hand"):
+		elif Input.is_action_pressed("right_hand"):
 			var frame = HAND.activate(state.Hand.RIGHT,PLAYER_DIR, PLAYER_IS, PLAYER_ACTION)
 			_change_action(state.Action.ATTACK)
 			PLAYER_FRAME = frame
-			# PLAYER.hide()
-			pass
+		# 	# print("Right!")
+			# print(frame)
+		pass
 
 func _change_hurtbox(hurt_box):
 	match hurt_box:
@@ -162,6 +179,8 @@ func _change_hurtbox(hurt_box):
 func _action_process():
 	match PLAYER_ACTION:
 		state.Action.JUMP:
+			HAND.deactivate()
+			PLAYER.show()
 			PLAYER.play("JUMP")
 			PLAYER_VELOCITY.y += state.JUMP_MOD
 		state.Action.JUMP_START:
@@ -210,10 +229,14 @@ func _action_process():
 			PLAYER_VELOCITY.x = 0
 			PLAYER.play("LANDING")
 		state.Action.ATTACK:
-			match HAND.attack(PLAYER_FRAME):
-				state.Weapon.HIDDEN:
-					HAND.deactivate()
-					PLAYER.show()
-				state.Weapon.ACTIVE:
-					PLAYER.hide()
-					pass
+			# print(PLAYER_FRAME)			
+			PLAYER_VELOCITY.x = 0
+			HAND.attack(PLAYER_FRAME)
+			if PLAYER_FRAME <= 0:
+				HAND.deactivate()
+				PLAYER.show()
+			else:
+				PLAYER.hide()
+		state.Action.STUN:
+			PLAYER_VELOCITY.x = 0
+			PLAYER.play("STUN")
