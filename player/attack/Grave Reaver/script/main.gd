@@ -1,18 +1,17 @@
 extends Node2D
 
 const state = preload("res://player/script/state.gd")
-
+const sig = preload("res://player/attack/sig-def.gd")
 const FRAME = 30
 var HIT = 0
 # this is temporary. you can create a logic to parse the given state provided by the caller
 # to determine which sprite node to call
 onready var SPRITE = null
 onready var HIT_BOX = null
-
+onready var HAND = 0
 func _deactivate():
 	SPRITE.hide()
 	HIT_BOX.monitoring = false
-
 
 func _activate():
 	SPRITE.show()
@@ -29,8 +28,9 @@ func _pick_frame(player_is, player_action):
 	SPRITE = $DefaultAttack
 	HIT_BOX = $DefaultAttack/HitBox
 	
-func activate(player_dir, player_is, player_action) -> int:
+func activate(which_hand, player_dir, player_is, player_action) -> int:
 	HIT = 1
+	HAND = which_hand
 	_pick_frame(player_is, player_action)
 	match player_dir:
 		state.Dir.LEFT:
@@ -48,21 +48,25 @@ func deactivate():
 	_deactivate()
 	# _set_activation_state(false)
 
-func attack(frame) -> int:
-	if frame > 0:
-		_active_frame(frame)
-		return state.Weapon.ACTIVE
-	else:
-		SPRITE.hide()
+func attack(frame):
+	# print(frame)
+	# if frame > 1:
+	_active_frame(frame)
+	# 	return HAND
+	if frame <= 0:
+	# 	SPRITE.hide()
 		SPRITE.frame = 0
-		return state.Weapon.HIDDEN
+	# return HAND
 
-func _active_frame(_frame):
+func _active_frame(frame):
+	# print(frame)
+
 	SPRITE.play("DEFAULT_ATTACK")
 
-func _hit_something(body):	
-	body.deal_damage(0)
-	body.deal_push_back(Vector2(10, 0))
-	body.deal_stun(20)
+func _hit_something(body):
+	# print(body)	
+	body.emit_signal(sig.DEAL_DAMAGE, 0)
+	body.emit_signal(sig.DEAL_PUSH_BACK, Vector2(10, 0))
+	body.emit_signal(sig.DEAL_STUN,20)
 
 	pass 

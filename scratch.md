@@ -6,7 +6,8 @@
 	TERTIARY: [Items, etc] 
 
 # Important!:
-	- Every Hurt Box that listen in the SECONDARY layer must implement these functions
-		- func deal_damage(int)
-		- func deal_push_back(Vector2)
-		- func deal_stun(int)
+	- Every Hurt Box that listen in the SECONDARY layer must implement these signals
+		- signal sig_deal_damage(int)
+		- signal sig_deal_push_back(Vector2)
+		- signal sig_deal_stun(int)
+	- Then every entity that owned these hurtbox must also listen to those signals too

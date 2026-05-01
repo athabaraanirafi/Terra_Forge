@@ -2,6 +2,8 @@ extends KinematicBody2D
 
 const include = preload("res://enemy/crook_simple/script/include.gd")
 const Bullet = preload("res://enemy/crook_simple/scene/bullet.tscn")
+const sig = preload("res://player/attack/sig-def.gd")
+
 const RANGE = 400
 const PERSONAL_SPACE = 200
 
@@ -17,6 +19,7 @@ enum Action {
 	BACK_AWAY,
 	SHOOTING,
 	IDLE,
+	STUNNED
 }
 
 const Action_Pack = {
@@ -47,7 +50,7 @@ const Action_Pack = {
 		Player_Is.TOO_CLOSE: Action.BACK_AWAY,
 		Player_Is.TOO_FAR: Action.PURSUE,
 		Player_Is.IN_RANGE: Action.SHOOTING
-	}
+	},
 }
 
 onready var CROOK = $AnimatedSprite
@@ -58,6 +61,7 @@ onready var ACTION_PACK = Action_Pack[ACTION]
 onready var FRAME = ACTION_PACK.Frame
 onready var DIR = include.Dir.RIGHT
 onready var MUZZLE = $Muzzle
+onready var HURT_BOX = $HurtBox
 
 func _opposite() -> int:
 	var dir
@@ -80,7 +84,7 @@ func _ready():
 	pass
 
 func _connet():
-	print("connect")
+	# print()
 	pass
 
 func _player_is():
